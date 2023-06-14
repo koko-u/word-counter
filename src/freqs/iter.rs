@@ -1,3 +1,4 @@
+/// An iterator of words and their number of occurrences.
 pub struct FrequencyIter<'a> {
     pub iter: std::collections::hash_map::Iter<'a, String, u32>,
 }

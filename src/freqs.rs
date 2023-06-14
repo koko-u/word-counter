@@ -1,18 +1,26 @@
+//! frequency of occurrences
+
 use core::fmt;
 use std::collections::HashMap;
 
 use self::builder::FrequencyBuilder;
 
+/// Keeps a hash table of frequency of occurrence
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Frequency(HashMap<String, u32>);
 
 impl Frequency {
+    /// Generate the builder that calculates the frequency of occurrence for each unit
     pub fn builder(s: String) -> FrequencyBuilder {
         FrequencyBuilder(s)
     }
+
+    /// Retrieves the hash table held internally
     pub fn into_inner(self) -> HashMap<String, u32> {
         self.0
     }
+
+    /// Merge the frequency of occurrence from an iterator that has the word and its number of occurrences as items
     pub fn merge<'a, I>(&mut self, items: I)
     where
         I: IntoIterator<Item = (&'a str, u32)>,
@@ -25,6 +33,7 @@ impl Frequency {
         }
     }
 
+    /// Get an iterator that retrieves words and their frequencies in order
     pub fn iter(&self) -> impl Iterator<Item = (&str, u32)> {
         iter::FrequencyIter {
             iter: self.0.iter(),
@@ -33,6 +42,7 @@ impl Frequency {
 }
 
 impl fmt::Display for Frequency {
+    /// Outputs word frequencies in descending order in histgram format
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut ordered = self
             .0

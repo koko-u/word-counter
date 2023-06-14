@@ -11,10 +11,12 @@ use crate::opts::CountUnit;
 
 use super::Frequency;
 
+/// Builder structure to calculate the frequency of occurrence from a string
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FrequencyBuilder(pub String);
 
 impl FrequencyBuilder {
+    /// Calculates the frequency of occurrence in specified units
     pub fn by(self, unit: CountUnit) -> Frequency {
         let mut freq = HashMap::<String, u32>::new();
 
