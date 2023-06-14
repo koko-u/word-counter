@@ -15,10 +15,25 @@ use super::Frequency;
 pub struct FrequencyBuilder(pub String);
 
 impl FrequencyBuilder {
-    pub fn by(self, _unit: CountUnit) -> Frequency {
+    pub fn by(self, unit: CountUnit) -> Frequency {
         let mut freq = HashMap::<String, u32>::new();
-        for word in self.0.split_whitespace() {
-            freq.entry(word.into()).and_modify(|c| *c += 1).or_insert(1);
+
+        match unit {
+            CountUnit::Char => {
+                for c in self.0.chars() {
+                    freq.entry(c.into()).and_modify(|c| *c += 1).or_insert(1);
+                }
+            }
+            CountUnit::Word => {
+                for word in self.0.split_whitespace() {
+                    freq.entry(word.into()).and_modify(|c| *c += 1).or_insert(1);
+                }
+            }
+            CountUnit::Line => {
+                for line in self.0.lines() {
+                    freq.entry(line.into()).and_modify(|c| *c += 1).or_insert(1);
+                }
+            }
         }
 
         Frequency(freq)
