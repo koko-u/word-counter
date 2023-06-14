@@ -1,3 +1,4 @@
+use core::fmt;
 use std::collections::HashMap;
 
 use self::builder::FrequencyBuilder;
@@ -28,6 +29,34 @@ impl Frequency {
         iter::FrequencyIter {
             iter: self.0.iter(),
         }
+    }
+}
+
+impl fmt::Display for Frequency {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut ordered = self
+            .0
+            .iter()
+            .map(|(k, v)| (k.as_str(), *v))
+            .collect::<Vec<_>>();
+        ordered.sort_by(|(_, count1), (_, count2)| count2.cmp(count1));
+
+        let width = ordered
+            .iter()
+            .map(|(word, _)| word.chars().count())
+            .max()
+            .unwrap_or(10);
+
+        let mut first = true;
+        for (word, count) in ordered {
+            if first {
+                write!(f, "{word:width$}:{}", "*".repeat(count as usize))?;
+                first = false;
+            }
+            write!(f, "\n{word:width$}:{}", "*".repeat(count as usize))?;
+        }
+
+        Ok(())
     }
 }
 

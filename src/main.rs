@@ -46,7 +46,7 @@ fn main() -> error_stack::Result<(), AppError> {
         frequency.merge(freq.iter());
     }
 
-    println!("{:#?}", frequency.into_inner());
+    println!("{frequency}");
 
     Ok(())
 }
