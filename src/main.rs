@@ -28,7 +28,7 @@ fn main() -> error_stack::Result<(), AppError> {
         let reader = io::BufReader::new(file);
         let freqs = reader
             .lines()
-            .map(|line| line.map(Frequency::from))
+            .map(|line| line.map(|line| Frequency::builder(line).by(opt.count_unit)))
             .collect::<Result<Vec<_>, _>>();
         let freq = match freqs {
             Ok(freqs) => freqs

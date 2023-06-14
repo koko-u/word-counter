@@ -1,20 +1,14 @@
 use std::collections::HashMap;
 
+use self::builder::FrequencyBuilder;
+
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Frequency(HashMap<String, u32>);
 
-impl From<String> for Frequency {
-    fn from(value: String) -> Self {
-        let mut freq = HashMap::<String, u32>::new();
-        for word in value.split_whitespace() {
-            freq.entry(word.into()).and_modify(|c| *c += 1).or_insert(1);
-        }
-
-        Self(freq)
-    }
-}
-
 impl Frequency {
+    pub fn builder(s: String) -> FrequencyBuilder {
+        FrequencyBuilder(s)
+    }
     pub fn into_inner(self) -> HashMap<String, u32> {
         self.0
     }
@@ -37,4 +31,5 @@ impl Frequency {
     }
 }
 
+mod builder;
 mod iter;
