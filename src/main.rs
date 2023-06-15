@@ -1,18 +1,18 @@
+use std::env;
 use std::fs;
 use std::io;
 use std::io::BufRead;
 
 use clap::Parser;
-use env_logger::Env;
-use error_stack::IntoReport;
-use error_stack::ResultExt;
 use word_counter::errors::AppError;
 use word_counter::freqs::Frequency;
 use word_counter::opts::Opt;
 
 fn main() -> error_stack::Result<(), AppError> {
-    dotenv::dotenv().into_report().change_context(AppError)?;
-    env_logger::init_from_env(Env::default().default_filter_or("info"));
+    if dotenv::var("RUST_LOG").is_err() {
+        env::set_var("RUST_LOG", "info");
+    }
+    env_logger::init();
 
     let opt = Opt::parse();
 
